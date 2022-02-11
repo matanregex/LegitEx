@@ -93,13 +93,13 @@ namespace LegitExConsole.Events
                 {
                     return EventType.Commit;
                 }
-                else if (jObject.ContainsKey("events") && jObject["events"].Contains("repository") && jObject.ContainsKey("action"))
+                else if (jObject.ContainsKey("installation") &&  jObject.ContainsKey("action"))//need a better way for this uc
                 {
-                    if (jObject["action"].ToString() == "created")
+                    if (new List<string>() { "added", "created" }.Contains(jObject["action"].ToString()))
                     {
                         return EventType.RepoCreate;
                     }
-                    else if (jObject["action"].ToString() == "deleted")
+                    else if (new List<string>() { "removed", "deleted" }.Contains(jObject["action"].ToString()))
                     {
                         return EventType.RepoDelete;
                     }
