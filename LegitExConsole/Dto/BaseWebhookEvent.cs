@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 
 namespace LegitExConsole.Dto
 {
@@ -38,33 +37,5 @@ namespace LegitExConsole.Dto
 
         [JsonProperty("email")]
         public string Email { get; set; }
-    }
-
-    public class PushingCodeEventDto: BaseWebhookEventDto
-    {
-        [JsonProperty("pusher")]
-        public Pusher Pusher { get; set; }
-    }
-
-    public class CreateTeamEventDto : BaseWebhookEventDto
-    {
-        //Locate in response and model
-        public string TeamName { get; set; }
-    }
-
-    public class RepoEventDto : BaseWebhookEventDto
-    {
-        [JsonProperty("events")]
-        public List<string> Events { get; set; }
-    }
-
-    public class CreateRepoEventDto: RepoEventDto
-    {
-        
-    }
-
-    public class DeleteRepoEventDto : RepoEventDto
-    {
-
     }
 }
