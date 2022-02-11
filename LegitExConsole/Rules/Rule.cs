@@ -1,9 +1,11 @@
-﻿using System;
+﻿using LegitExConsole.Events;
+using System;
+using System.Collections.Generic;
 
-namespace LegitExConsole.Dto
+namespace LegitExConsole.Rules
 {
     public interface IRule
     {
-        bool ValidateEvent(BaseEvent e);
+        Tuple<bool, List<string>> ValidateEvent(BaseEvent e);
     }
 }

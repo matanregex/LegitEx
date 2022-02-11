@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using LegitExConsole.Events;
+using Microsoft.Extensions.Caching.Memory;
 using System;
+using System.Collections.Generic;
 
-namespace LegitExConsole.Dto
+namespace LegitExConsole.Rules
 {
     public class DeleteRepoRule : IRule
     {
@@ -12,8 +14,9 @@ namespace LegitExConsole.Dto
             _cache = new MemoryCache(new MemoryCacheOptions());
         }
 
-        public bool ValidateEvent(BaseEvent e)
+        public Tuple<bool, List<string>> ValidateEvent(BaseEvent e)
         {
+            var error = "Failed validation: creating a repository and deleting it in less than 10 minutes";
             switch (e)
             {
                 case RepoCreationEvent repoCreationEvent:
@@ -22,12 +25,16 @@ namespace LegitExConsole.Dto
                 case RepoDeletionEvent repoDeletionEvent:
                     if (_cache.TryGetValue(repoDeletionEvent.RepositoryId, out DateTime creationDate))
                     {
-                        return (repoDeletionEvent.EventDate - creationDate).TotalMinutes > minOffeset;
+                        var response = (repoDeletionEvent.EventDate - creationDate).TotalMinutes > minOffeset;
+                        if (!response)
+                        {
+                            return new Tuple<bool, List<string>>(false, new List<string> { error });
+                        }
                     }
                     break;
             }
 
-            return true;
+            return new Tuple<bool, List<string>>(true, new List<string>());
         }
     }
 }
