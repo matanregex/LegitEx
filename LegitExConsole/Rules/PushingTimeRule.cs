@@ -13,11 +13,10 @@ namespace LegitExConsole.Rules
 
         public Tuple<bool, List<string>> ValidateEvent(BaseEvent e)
         {
-            var timeOfDay = e.EventDate.TimeOfDay;
-            var result = timeOfDay > MinTimespan ||
-                timeOfDay < MaxTimespan;
+            var eventTimeOfDay = e.EventDate.TimeOfDay;
+            var result = eventTimeOfDay > MaxTimespan || eventTimeOfDay < MinTimespan;
 
-            return new Tuple<bool, List<string>>(result, new List<string>() { result ? null : Error });
+            return new Tuple<bool, List<string>>(result, new List<string>() { result ? "" : Error });
         }
     }
 }

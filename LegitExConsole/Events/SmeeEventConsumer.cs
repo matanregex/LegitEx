@@ -35,17 +35,17 @@ namespace LegitExConsole.Events
 
             var _object = JsonConvert.DeserializeObject<JObject>(e.Data.Body.ToString());
             var rc = new RuleComposite();
-            Tuple<bool, List<string>> response = null;
-            EvaluateEvent(e, _object, rc, ref response);
-            
+            var response = EvaluateEvent(e, _object, rc);
+
             if (!response.Item1)
             {
                 Console.WriteLine($"Errors: {string.Join(",", response.Item2)} While consuming event: {e.Data.Body}");
             }
         }
 
-        private void EvaluateEvent(SmeeEvent e, JObject _object, RuleComposite rc, ref Tuple<bool, List<string>> response)
+        private Tuple<bool, List<string>> EvaluateEvent(SmeeEvent e, JObject _object, RuleComposite rc)
         {
+            var errorMessage = "";
             try
             {
                 switch (GetEventType(_object))
@@ -53,33 +53,31 @@ namespace LegitExConsole.Events
                     case EventType.Commit:
                         var pcEvent = JsonConvert.DeserializeObject<PushingCodeEventDto>(e.Data.Body.ToString(), settings);
                         var _pcEvent = new CommitEvent() { EventDate = ConvertDateFromEpoch(pcEvent.Repository.Pushed), PusherName = pcEvent.Pusher.Name };
-                        response = rc.ValidateEvent(_pcEvent);
-                        break;
+                        return rc.ValidateEvent(_pcEvent);
                     case EventType.RepoCreate:
                         var crEvent = JsonConvert.DeserializeObject<CreateRepoEventDto>(e.Data.Body.ToString(), settings);
                         var _crEvent = new RepoCreationEvent() { EventDate = ConvertDateFromEpoch(crEvent.Repository.Pushed), RepositoryId = crEvent.Repository.Id };
-                        response = rc.ValidateEvent(_crEvent);
-                        break;
+                        return rc.ValidateEvent(_crEvent);
                     case EventType.RepoDelete:
                         var drEvent = JsonConvert.DeserializeObject<CreateRepoEventDto>(e.Data.Body.ToString(), settings);
                         var _drEvent = new RepoDeletionEvent() { EventDate = ConvertDateFromEpoch(drEvent.Repository.Pushed), RepositoryId = drEvent.Repository.Id };
-                        response = rc.ValidateEvent(_drEvent);
-                        break;
+                        return rc.ValidateEvent(_drEvent);
                     case EventType.TeamCreation:
                         var ctEvent = JsonConvert.DeserializeObject<CreateTeamEventDto>(e.Data.Body.ToString(), settings);
                         var _ctEvent = new TeamCreationEvent() { EventDate = ConvertDateFromEpoch(ctEvent.Repository.Pushed), TeamName = ctEvent.TeamName };
-                        response = rc.ValidateEvent(_ctEvent);
-                        break;
+                        return rc.ValidateEvent(_ctEvent);
                     default:
-                        Console.WriteLine($"Unsupported event: {e.Data.Body}");
+                        errorMessage = $"Unsupported event: {e.Data.Body}";
                         break;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error parsing: {e?.Data?.Body}", ex);
-                return;
+                errorMessage = $"Error parsing: {e?.Data?.Body}";
+                Console.WriteLine(errorMessage, ex);
             }
+
+            return new Tuple<bool, List<string>>(false, new List<string>() { errorMessage });
         }
 
         private DateTime ConvertDateFromEpoch(long epoch)
