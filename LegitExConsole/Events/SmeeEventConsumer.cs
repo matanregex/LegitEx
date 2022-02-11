@@ -26,7 +26,7 @@ namespace LegitExConsole.Events
             client.StartAsync().ConfigureAwait(false).GetAwaiter();
         }
 
-        private void Client_OnMessage(object sender, Smee.IO.Client.Dto.SmeeEvent e)
+        private void Client_OnMessage(object sender, SmeeEvent e)
         {
             if (e?.Data?.Body == null)
             {
