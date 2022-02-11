@@ -64,7 +64,7 @@ namespace LegitExConsole.Events
                         return rc.ValidateEvent(_drEvent);
                     case EventType.TeamCreation:
                         var ctEvent = JsonConvert.DeserializeObject<CreateTeamEventDto>(e.Data.Body.ToString(), settings);
-                        var _ctEvent = new TeamCreationEvent() { EventDate = ConvertDateFromEpoch(ctEvent.Repository.Pushed), TeamName = ctEvent.TeamName };
+                        var _ctEvent = new TeamCreationEvent() { EventDate = ConvertDateFromEpoch(ctEvent.Repository.Pushed), TeamName = ctEvent.Team?.Name };
                         return rc.ValidateEvent(_ctEvent);
                     default:
                         errorMessage = $"Unsupported event: {e.Data.Body}";
