@@ -1,7 +1,7 @@
-﻿namespace LegitExConsole.Dto
+﻿namespace LegitExConsole.Events
 {
     public class RepoEvent : BaseEvent
     {
-        public string RepositoryId { get; set; }
+        public long RepositoryId { get; set; }
     }
 }

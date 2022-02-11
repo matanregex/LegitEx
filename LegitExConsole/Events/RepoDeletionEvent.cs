@@ -1,4 +1,4 @@
-﻿namespace LegitExConsole.Dto
+﻿namespace LegitExConsole.Events
 {
     public class RepoDeletionEvent : RepoEvent
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LegitExConsole.Dto
+namespace LegitExConsole.Events
 {
     public abstract class BaseEvent
     {
