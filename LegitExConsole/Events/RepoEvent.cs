@@ -4,4 +4,12 @@
     {
         public long RepositoryId { get; set; }
     }
+
+    public class RepoCreationEvent : RepoEvent
+    {
+    }
+
+    public class RepoDeletionEvent : RepoEvent
+    {
+    }
 }

@@ -9,11 +9,6 @@ using System.Linq;
 
 namespace LegitExConsole.Events
 {
-    public interface IBaseEventConsumer
-    {
-        public event EventHandler<BaseEvent> OnMessage;
-    }
-
     public class SmeeEventConsumer : IBaseEventConsumer
     {
         public event EventHandler<BaseEvent> OnMessage;

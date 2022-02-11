@@ -13,7 +13,7 @@ namespace LegitExConsole
             var repoSmeeClient = EventFactory.Instance.GetConsumer(RepoUri);
             var domainSmeeClient = EventFactory.Instance.GetConsumer(DomainUri);
             
-            while (true)
+            while (true)//keep conncetion
             {
                 //
             }
